@@ -1,0 +1,63 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load Dataset
+df = pd.read_csv("placement.csv")
+
+print(df.head())
+
+# Features
+X = df['cgpa']
+X = X.values.reshape(-1,1)
+
+# Target
+y = df['package']
+
+# Split Dataset
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.3,
+    random_state=2
+)
+
+# Linear Regression
+from sklearn.linear_model import LinearRegression
+
+lr = LinearRegression()
+
+# Train Model
+lr.fit(X_train,y_train)
+
+print("Coefficient:")
+print(lr.coef_)
+
+print("Intercept:")
+print(lr.intercept_)
+
+# Prediction
+y_pred = lr.predict(X_test)
+
+# Graph
+plt.scatter(X_train,y_train)
+plt.plot(X_train,lr.predict(X_train),color='red')
+plt.xlabel("CGPA")
+plt.ylabel("Package")
+plt.title("Linear Regression")
+plt.show()
+
+# Metrics
+from sklearn.metrics import mean_absolute_error
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import r2_score
+
+print("MAE:")
+print(mean_absolute_error(y_test,y_pred))
+
+print("MSE:")
+print(mean_squared_error(y_test,y_pred))
+
+print("R2 Score:")
+print(r2_score(y_test,y_pred))
